@@ -1,7 +1,7 @@
 const { Sequelize, DataTypes } = require('sequelize');
 
 const sequelize = new Sequelize('bubblr', 'root', '', {
-  host: 'localhost',
+  host: '127.0.0.1',
   dialect: 'mysql',
   logging: false,
 });
@@ -60,76 +60,76 @@ const UserFriends = sequelize.define('UserFriends', {
 UserFriends.sync()
   .catch((err) => console.error('Failed syncing UserFriends: ', err));
 
-  const customDrinks = sequelize.define('customDrinks', {
-    userId: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: 'id',
-      }
+const customDrinks = sequelize.define('customDrinks', {
+  userId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    }
+  },
+  drinkName: {
+    type: DataTypes.STRING,
+  },
+  drinkCategory: {
+    type: DataTypes.STRING,
+  },
+  alcoholicDrink: {
+    type: DataTypes.STRING,
+  },
+  drinkGlass: {
+    type: DataTypes.STRING,
+  },
+  drinkInstructions: {
+    type: DataTypes.TEXT,
+  },
+  drinkIngredients: {
+    type: DataTypes.STRING,
+  },
+  drinkMeasurements: {
+    type: DataTypes.STRING,
+    set(val) {
+      this.setDataValue("drinkMeasurements", JSON.stringify(val ?? ""));
     },
-    drinkName: {
-      type: DataTypes.STRING,
-    },
-    drinkCategory: {
-      type: DataTypes.STRING,
-    },
-    alcoholicDrink: {
-      type: DataTypes.STRING,
-    },
-    drinkGlass: {
-      type: DataTypes.STRING,
-    },
-    drinkInstructions: {
-      type: DataTypes.TEXT,
-    },
-    drinkIngredients: {
-      type: DataTypes.STRING,
-    },
-    drinkMeasurements: {
-      type: DataTypes.STRING,
-      set(val) {
-        this.setDataValue("drinkMeasurements", JSON.stringify(val ?? ""));
-     },
-    },
-  })
+  },
+})
 
-  customDrinks.sync()
-    .catch((err) => console.error('Failed syncing customDrinks: ', err));
+customDrinks.sync()
+  .catch((err) => console.error('Failed syncing customDrinks: ', err));
 
-    const estDrinks = sequelize.define('estDrinks', {
-      drinkId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        unique: true,
-        primaryKey: true,
-      },
-      drinkName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
-      drinkCategory: {
-        type: DataTypes.STRING,
-      },
-      alcoholicDrink: {
-        type: DataTypes.STRING,
-      },
-      drinkGlass: {
-        type: DataTypes.STRING,
-      },
-      drinkInstructions: {
-        type: DataTypes.TEXT,
-      },
-      drinkIngredients: {
-        type: DataTypes.JSON,
-      },
-      drinkImage: {
-        type: DataTypes.STRING
-      }
-    })
+const estDrinks = sequelize.define('estDrinks', {
+  drinkId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    unique: true,
+    primaryKey: true,
+  },
+  drinkName: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  drinkCategory: {
+    type: DataTypes.STRING,
+  },
+  alcoholicDrink: {
+    type: DataTypes.STRING,
+  },
+  drinkGlass: {
+    type: DataTypes.STRING,
+  },
+  drinkInstructions: {
+    type: DataTypes.TEXT,
+  },
+  drinkIngredients: {
+    type: DataTypes.JSON,
+  },
+  drinkImage: {
+    type: DataTypes.STRING
+  }
+})
 
-    estDrinks.sync()
-      .catch((err) => console.error('Failed syncing estDrinks: ', err));
+estDrinks.sync()
+  .catch((err) => console.error('Failed syncing estDrinks: ', err));
 
 const Comment = sequelize.define('Comment', {
   drinkId: {
@@ -165,7 +165,7 @@ const Rating = sequelize.define('Rating', {
 // Sync models
 Comment.sync().catch((err) => console.error('Failed syncing Comment:', err));
 Rating.sync().catch((err) => console.error('Failed syncing Rating:', err));
-    
+
 module.exports = {
   User,
   Event,
