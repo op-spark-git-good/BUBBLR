@@ -162,6 +162,27 @@ const Rating = sequelize.define('Rating', {
   },
 });
 
+const MatchGame = sequelize.define('MatchGame', {
+  userId: {
+    type: DataTypes.INTEGER,
+    references: {
+      model: User,
+      key: 'id',
+    },
+    allowNull: false,
+  },
+  drinkId: {
+    type: DataTypes.INTEGER,
+    allowNull: false,
+  },
+  imageUrl: {
+    type: DataTypes.STRING, // Stores user-uploaded image (Cloudinary URL)
+  },
+});
+
+MatchGame.sync()
+  .catch((err) => console.error('Failed syncing MatchGame:', err));
+
 // Sync models
 Comment.sync().catch((err) => console.error('Failed syncing Comment:', err));
 Rating.sync().catch((err) => console.error('Failed syncing Rating:', err));
@@ -175,4 +196,5 @@ module.exports = {
   estDrinks,
   Comment,
   Rating,
+  MatchGame
 };
