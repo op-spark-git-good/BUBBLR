@@ -1,5 +1,11 @@
 const { User, MatchGame } = require('./index');
 
+async function clearDatabase() {
+  await MatchGame.destroy({ where: {} });
+  await User.destroy({ where: {} });
+  console.log('Database cleared');
+}
+
 async function seedUsers() {
   const usersData = [
     { googleId: 'user1_google', email: 'user1@example.com' },
@@ -7,20 +13,14 @@ async function seedUsers() {
     { googleId: 'user3_google', email: 'user3@example.com' },
   ];
 
-  const users = [];
-  for (const userData of usersData) {
-    const [user] = await User.findOrCreate({
-      where: { googleId: userData.googleId },
-      defaults: userData, // Insert only if not found
-    });
-    users.push(user);
-  }
-
+  const users = await User.bulkCreate(usersData, { returning: true });
   console.log('Users seeded');
   return users;
 }
 
 async function seedMatchGames() {
+  await clearDatabase(); // Ensure fresh data before seeding
+
   const users = await seedUsers(); // Ensure Users exist before inserting MatchGames
 
   const matchGamesData = [
